@@ -1,15 +1,15 @@
 #include <Windows.h>
 #include <stdio.h>
 
-int main(int argc, char** argv)
+int wmain(int argc, wchar_t** argv)
 {
-	if(argc == 1)
+	if (argc == 1)
 	{
 		printf("Window title is not set!\n");
 		exit(-1);
 	}
 
-	char* sWindowTitle = NULL;
+	wchar_t* sWindowTitle = NULL;
 	int iSleepInterval = 500;
 
 	if (argc == 2)
@@ -20,10 +20,10 @@ int main(int argc, char** argv)
 	if (argc == 3)
 	{
 		sWindowTitle = argv[1];
-		iSleepInterval = atoi(argv[2]);
+		iSleepInterval = _wtoi(argv[2]);
 	}
 
-	HWND hGameWindow = FindWindow(NULL, sWindowTitle);
+	HWND hGameWindow = FindWindowW(NULL, sWindowTitle);
 	if (hGameWindow != NULL)
 	{
 		printf("Found target window: %p\n", hGameWindow);
@@ -31,14 +31,14 @@ int main(int argc, char** argv)
 		printf("Start sending WM_ACTIVE message to the target window");
 		while (TRUE)
 		{
-			LRESULT lRes = SendMessage(hGameWindow, WM_ACTIVATE, WA_CLICKACTIVE, NULL);
+			LRESULT lRes = SendMessageW(hGameWindow, WM_ACTIVATE, WA_CLICKACTIVE, NULL);
 			if (lRes != 0)
 			{
 				printf("SendMessage result: %lld\n", lRes);
 				printf("Maybe we encountered an error, exiting.\n");
 				exit(-1);
 			}
-			
+
 			Sleep(iSleepInterval);
 		}
 	}
